@@ -2,7 +2,7 @@
 #include "../include/MotorDriver/motor_private.h"
 #include <avr/io.h>
 
-#define TOP_PWM_10BIT    0x03ff
+#define TOP_PWM_10BIT    0x03ffUL
 static void SetChannelA(uint16_t val);
 static void SetChannelB(uint16_t val);
 void motor_init()
@@ -16,15 +16,15 @@ void motor_init()
     reg_val|=(FAST_PWM_10BIT_WGM12<<WGM12)|(TIMER1_NO_PRESCALER<<CS10);
     TCCR1B|=reg_val;
     //intit pwm 50%
-    motor_setDutycycle(MOTOR_CHANNER_A,50);
-    motor_setDutycycle(MOTOR_CHANNER_B,50);
+    motor_setDutycycle(MOTOR_CHANNER_A,255);
+    motor_setDutycycle(MOTOR_CHANNER_B,125);
 
 }
 void motor_setDutycycle(motor_eunumChannelSelcetor_t channel,uint8_t duty)
 {
-    if(duty<100 && duty>0)
-    {
-        uint16_t reg_val=TOP_PWM_10BIT*(duty/100.0);
+    // if(duty<100 && duty>0)
+    // {
+        uint16_t reg_val=TOP_PWM_10BIT*(duty/(float)255);
         switch (channel)
         {
         case MOTOR_CHANNER_A:
@@ -37,7 +37,7 @@ void motor_setDutycycle(motor_eunumChannelSelcetor_t channel,uint8_t duty)
         default:
             break;
         }
-    }
+    // }
 }
 
 //private function

@@ -26,7 +26,7 @@ typedef enum
     TIMER1_EXTERNAKClk_FALLING_EDGE,
     TIMER1_EXTERNAKClk_RISING_EDGE,
 }timer1_enumPrescaler_t;
-#define FAST_PWM_10BIT_WGM12 0b10
+#define FAST_PWM_10BIT_WGM12 0b01
 
 
 
