@@ -1,27 +1,37 @@
-#define F_CPU 8000000UL
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include "../MCAL/UART/UART.h"
+#include "../include/OS/SCH.h"
 #include "../include/MotorDriver/motor.h"
+void toggleD1()
+{
+    PORTD ^= 1;
+}
+
 int main()
 {
-    //UART_Init();
-    motor_init();
-    uint8_t a=0,b=0;
-    //DDRD |= (1 << PD6);
+    SCH_intit();
+    SCH_Add_Task(toggleD1, 1, 100);
+    // UART_Init();
+     motor_init();
+     uint8_t a=0,b=0;
+    // DDRD |= (1 << PD6);
     DDRD |= (1 << PD4);
     DDRD |= (1 << PD5);
+    DDRD |= (1 << PD1);
     while (1)
     {
-        _delay_ms(500);
+        SCH_Dispatch_Tasks();
+        // _delay_ms(500);
         motor_setDutycycle(MOTOR_CHANNER_A,a);
         motor_setDutycycle(MOTOR_CHANNER_B,b);
         a+=5;
         b-=5;
- 
-        _delay_ms(1);
+
+        // _delay_ms(1);
         /***
-         * 
+         *
          if (UART_DataAvailable())
          {
              uint8_t receivedData = UART_ReceiveByte();
